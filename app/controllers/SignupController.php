@@ -21,7 +21,13 @@ class SignupController extends ControllerBase
         );
 
         if ($success) {
-            echo "Thanks for registering!";
+
+            // Using session flash
+            $this->flashSession->success('Thanks for registering!');
+
+            // Make a full HTTP redirection
+            return $this->response->redirect('signup');
+
         } else {
             echo "Sorry, the following problems were generated: ";
 
