@@ -1,4 +1,6 @@
 <?php
+use Phalcon\Http\Request;
+// use Phalcon\Filter;
 
 class SignupController extends ControllerBase
 {
@@ -9,11 +11,28 @@ class SignupController extends ControllerBase
 
     public function registerAction()
     {
+        // Getting a request instance
+        $request = new Request();
+        // $filter = new Filter();
+
+        // Check if request has made with POST
+        if ($this->request->isPost()) {
+            // Access POST data
+            $name = $this->request->getPost('name', ['trim', 'string']);
+            $email = $this->request->getPost('email', ['trim', 'email']);
+        }
+
+        // Returns 'Hello'
+        // echo $filter->sanitize('<h1>Hello</h1>', ['striptags', 'trim']);
+
         $user = new Users();
 
         // Store and check for errors
         $success = $user->save(
-            $this->request->getPost(),
+            [
+                "name" => $name,
+                "email" => $email
+            ],
             [
                 "name",
                 "email",
