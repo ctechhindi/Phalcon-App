@@ -1,0 +1,21 @@
+<h2>Sign up using this form</h2>
+
+<p><?php echo $this->flashSession->output() ?></p>
+
+<?php echo $this->tag->form("signup/register"); ?>
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <?php echo $this->tag->textField(["name", "class" => "form-control", "placeholder" => "Enter Full Name"]); ?>
+    </div>
+
+    <div class="form-group">
+        <label for="email">E-Mail</label>
+        <?php echo $this->tag->emailField(["email", "class" => "form-control", "placeholder" => "Enter Email Address"]); ?>
+    </div>
+
+    <div class="form-group">
+        <?php echo $this->tag->submitButton(["Register", "class" => "btn btn-primary"]); ?>
+    </div>
+
+</form>
