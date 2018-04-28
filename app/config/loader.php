@@ -10,4 +10,14 @@ $loader->registerDirs(
         $config->application->controllersDir,
         $config->application->modelsDir
     ]
-)->register();
+);
+
+// Register some namespaces
+$loader->registerNamespaces(
+    [
+       'App\Forms'  => APP_PATH .'/forms/',
+    ]
+);
+
+// Register autoloader
+$loader->register();

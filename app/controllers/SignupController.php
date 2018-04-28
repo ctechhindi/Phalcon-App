@@ -1,31 +1,28 @@
 <?php
 use Phalcon\Http\Request;
-// use Phalcon\Filter;
+
+// use form
+use App\Forms\RegisterForm;
 
 class SignupController extends ControllerBase
 {
 
     public function indexAction()
     {
+        $this->view->form = new RegisterForm();
     }
 
     public function registerAction()
     {
-        // Getting a request instance
         $request = new Request();
-        // $filter = new Filter();
+        $user = new Users();
 
-        // Check if request has made with POST
-        if ($this->request->isPost()) {
-            // Access POST data
-            $name = $this->request->getPost('name', ['trim', 'string']);
-            $email = $this->request->getPost('email', ['trim', 'email']);
+        if (!$this->request->isPost()) {
+            return $this->response->redirect('signup');
         }
 
-        // Returns 'Hello'
-        // echo $filter->sanitize('<h1>Hello</h1>', ['striptags', 'trim']);
-
-        $user = new Users();
+        $name = $this->request->getPost('name', ['trim', 'string']);
+        $email = $this->request->getPost('email', ['trim', 'email']);
 
         // Store and check for errors
         $success = $user->save(
