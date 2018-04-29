@@ -16,44 +16,62 @@ class SignupController extends ControllerBase
     {
         $request = new Request();
         $user = new Users();
+        $form = new RegisterForm(); 
 
+        // check request
         if (!$this->request->isPost()) {
             return $this->response->redirect('signup');
         }
 
-        $name = $this->request->getPost('name', ['trim', 'string']);
-        $email = $this->request->getPost('email', ['trim', 'email']);
-
-        // Store and check for errors
-        $success = $user->save(
-            [
-                "name" => $name,
-                "email" => $email
-            ],
-            [
-                "name",
-                "email",
-            ]
-        );
-
-        if ($success) {
-
-            // Using session flash
-            $this->flashSession->success('Thanks for registering!');
-
-            // Make a full HTTP redirection
-            return $this->response->redirect('signup');
-
-        } else {
-            echo "Sorry, the following problems were generated: ";
-
-            $messages = $user->getMessages();
-
-            foreach ($messages as $message) {
-                echo $message->getMessage(), "<br/>";
+        $form->bind($_POST, $user);
+        // check form validation
+        if (!$form->isValid()) {
+            foreach ($form->getMessages() as $message) {
+                $this->flashSession->error($message);
+                $this->dispatcher->forward([
+                    'controller' => $this->router->getControllerName(),
+                    'action'     => 'index',
+                ]);
+                return;
             }
         }
 
+        $user->setPassword($this->security->hash($_POST['password']));
+
+        if (!$user->save()) {
+            foreach ($user->getMessages() as $m) {
+                $this->flashSession->error($m);
+                $this->dispatcher->forward([
+                    'controller' => $this->router->getControllerName(),
+                    'action'     => 'index',
+                ]);
+                return;
+            }
+        }
+
+        $this->flashSession->success('Thanks for registering!');
+        return $this->response->redirect('signup');
+
+        // $success = $user->save(
+        //     [
+        //         "name" => $this->request->getPost('name', ['trim', 'string']),
+        //         "email" => $this->request->getPost('email', ['trim', 'email']),
+        //     ],
+        //     [
+        //         "name",
+        //         "email",
+        //     ]
+        // );
+
+        // if ($success) {
+        //     $this->flashSession->success('Thanks for registering!');
+        //     return $this->response->redirect('signup');
+        // } else {
+        //     echo "Sorry, the following problems were generated: ";
+        //     foreach ($user->getMessages() as $message) {
+        //         echo $message->getMessage(), "<br/>";
+        //     }
+        // }
         $this->view->disable();
     }
 }
