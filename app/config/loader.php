@@ -19,5 +19,12 @@ $loader->registerNamespaces(
     ]
 );
 
+// Register some classes
+$loader->registerClasses(
+    [
+        'Mail' => APP_PATH. '/library/Mail/Mail.php',
+    ]
+);
+
 // Register autoloader
 $loader->register();

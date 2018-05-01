@@ -17,6 +17,7 @@ class SignupController extends ControllerBase
         $request = new Request();
         $user = new Users();
         $form = new RegisterForm(); 
+        $mail = new Mail();
 
         // check request
         if (!$this->request->isPost()) {
@@ -48,6 +49,16 @@ class SignupController extends ControllerBase
                 return;
             }
         }
+
+        /**
+         * Send Email
+         */
+        $params = [
+            'name' => $this->request->getPost('name'),
+            'link' => "http://localhost/_Phalcon/demo-app2/signup"
+        ];
+
+        $mail->send($this->request->getPost('email', ['trim', 'email']), 'signup', $params);
 
         $this->flashSession->success('Thanks for registering!');
         return $this->response->redirect('signup');

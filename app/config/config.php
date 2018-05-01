@@ -29,5 +29,17 @@ return new \Phalcon\Config([
         // of the webpspace.  This will break if the public/index.php entry point is moved or
         // possibly if the web server rewrite rules are changed. This can also be set to a static path.
         'baseUri'        => preg_replace('/public([\/\\\\])index.php$/', '', $_SERVER["PHP_SELF"]),
-    ]
+    ],
+    'mail' => [
+        'templatesDir' => 'mail/',
+        'fromName' => 'Phalcon App',
+        'fromEmail' => 'ctechhindi@gmail.com',
+        'smtp' => [
+            'server' => 'ssl://smtp.gmail.com',
+            'port' => '465',
+            'security' => 'ssl',
+            'username' => 'ctechhindi@gmail.com',
+            'password' => 'gmail password',
+        ],
+    ],
 ]);
