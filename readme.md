@@ -7,7 +7,10 @@
 
 ## Git Commit's
 
-
+- Home, Login, Register Page Design
+    * Create New Routes
+    * Add Bootstrap 4.1
+    * Add Font Awesome
 - Swift Mailer library and Phalcon send email with gmail
     * https://myaccount.google.com/u/1/lesssecureapps
 - User Registration
