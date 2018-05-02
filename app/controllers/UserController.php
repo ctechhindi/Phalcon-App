@@ -20,8 +20,6 @@ class UserController extends ControllerBase
         $this->usersModel = new Users();
     }
 
-    public function indexAction() {}
-    
     /**
      * Login Page View
      */
@@ -86,13 +84,28 @@ class UserController extends ControllerBase
                'email' => $email,
             ]
         ]);
+            
+        // Check User Active
+        if ($user->active != 1) {
+            $this->flashSession->error("User Deactivate");
+            return $this->response->redirect('user/login');
+        }
         
         # Doc :: https://docs.phalconphp.com/en/3.3/security
         if ($user) {
-            if ($this->security->checkHash($password, $user->password)) {
-                // The password is valid
-                $this->flashSession->success("Login Success");
-                return $this->response->redirect('user/login');
+            if ($this->security->checkHash($password, $user->password))
+            {
+                # https://docs.phalconphp.com/en/3.3/session#start
+
+                // Set a session
+                $this->session->set('AUTH_NAME', $user->name);
+                $this->session->set('AUTH_EMAIL', $user->email);
+                $this->session->set('AUTH_CREATED', $user->created);
+                $this->session->set('AUTH_UPDATED', $user->updated);
+                $this->session->set('IS_LOGIN', 1);
+
+                // $this->flashSession->success("Login Success");
+                return $this->response->redirect('user/profile');
             }
         } else {
             // To protect against timing attacks. Regardless of whether a user
@@ -106,15 +119,24 @@ class UserController extends ControllerBase
         return $this->response->redirect('user/login');
     }
 
+    /**
+     * Register Page View
+     */
     public function registerAction()
     {
         $this->tag->setTitle('Phalcon :: Register');
         $this->view->form = new RegisterForm();
     }
 
+    /**
+     * Register Action
+     * @method: POST
+     * @param: name
+     * @param: email
+     * @param: password
+     */
     public function registerSubmitAction()
     {
-        $user = new Users();
         $form = new RegisterForm(); 
         $mail = new Mail();
 
@@ -123,7 +145,7 @@ class UserController extends ControllerBase
             return $this->response->redirect('user/register');
         }
 
-        $form->bind($_POST, $user);
+        $form->bind($_POST, $this->usersModel);
         // check form validation
         if (!$form->isValid()) {
             foreach ($form->getMessages() as $message) {
@@ -137,15 +159,15 @@ class UserController extends ControllerBase
         }
 
         # Doc :: https://docs.phalconphp.com/en/3.3/security
-        $user->setPassword($this->security->hash($_POST['password']));
+        $this->usersModel->setPassword($this->security->hash($_POST['password']));
 
-        $user->setActive(1);
-        $user->setCreated(time());
-        $user->setUpdated(time());
+        $this->usersModel->setActive(1);
+        $this->usersModel->setCreated(time());
+        $this->usersModel->setUpdated(time());
         
         # Doc :: https://docs.phalconphp.com/en/3.3/db-models#create-update-records
-        if (!$user->save()) {
-            foreach ($user->getMessages() as $m) {
+        if (!$this->usersModel->save()) {
+            foreach ($this->usersModel->getMessages() as $m) {
                 $this->flashSession->error($m);
                 $this->dispatcher->forward([
                     'controller' => $this->router->getControllerName(),
@@ -168,6 +190,27 @@ class UserController extends ControllerBase
         return $this->response->redirect('user/register');
 
         $this->view->disable();
+    }
+
+
+    /**
+     * User Profile
+     */
+    public function profileAction()
+    {
+        $this->authorized();
+    }
+
+    /**
+     * User Logout
+     */
+    public function logoutAction()
+    {
+        # https://docs.phalconphp.com/en/3.3/session#remove-destroy
+
+        // Destroy the whole session
+        $this->session->destroy();
+        return $this->response->redirect('user/login');
     }
 }
 

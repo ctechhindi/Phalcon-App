@@ -7,6 +7,8 @@
 
 ## Git Commit's
 
+- Phalcon Login, Logout, Profile with Session
+    * Phalcon not found page error handler
 - Password Hashing and Cross-Site Request Forgery (CSRF) protection
 - Home, Login, Register Page Design
     * Create New Routes

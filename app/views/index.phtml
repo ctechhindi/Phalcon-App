@@ -27,18 +27,38 @@
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <?php
-                        echo $this->tag->linkTo([
-                            "user/login",
-                            '<i class="fa fa-sign-in" aria-hidden="true"></i> Login',
-                            "class" => "btn btn-light"
-                        ]);
-                        echo "&nbsp;";
+                        if ($this->session->has('IS_LOGIN'))
+                        {
+                            echo $this->tag->linkTo([
+                                "user/profile",
+                                '<i class="fa fa-user" aria-hidden="true"></i> Profile',
+                                "class" => "btn btn-light"
+                            ]);
 
-                        echo $this->tag->linkTo([
-                            "user/register",
-                            '<i class="fa fa-user-plus" aria-hidden="true"></i> Register',
-                            "class" => "btn btn-outline-light"
-                        ]);
+                            echo "&nbsp;";
+
+                            echo $this->tag->linkTo([
+                                "user/logout",
+                                '<i class="fa fa-sign-out" aria-hidden="true"></i> Logout',
+                                "class" => "btn btn-danger"
+                            ]);
+
+
+                        } else 
+                        {
+                            echo $this->tag->linkTo([
+                                "user/login",
+                                '<i class="fa fa-sign-in" aria-hidden="true"></i> Login',
+                                "class" => "btn btn-light"
+                            ]);
+                            echo "&nbsp;";
+    
+                            echo $this->tag->linkTo([
+                                "user/register",
+                                '<i class="fa fa-user-plus" aria-hidden="true"></i> Register',
+                                "class" => "btn btn-outline-light"
+                            ]);
+                        }
                     ?>
                 </form>
             </div>

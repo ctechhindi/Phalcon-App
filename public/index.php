@@ -2,6 +2,7 @@
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Flash\Direct as FlashDirect;
 use Phalcon\Flash\Session as FlashSession;
+use Phalcon\Session\Adapter\Files as Session;
 
 error_reporting(E_ALL);
 
@@ -50,6 +51,53 @@ try {
             return $flash;
         }
     );
+
+
+    // Start the session the first time when some component request the session service
+    $di->setShared(
+        'session',
+        function () {
+            $session = new Session();
+
+            $session->start();
+
+            return $session;
+        }
+    );
+
+    # https://stackoverflow.com/questions/24446258/phalcon-not-found-page-error-handler
+    $di->set('dispatcher', function() {
+
+        $eventsManager = new \Phalcon\Events\Manager();
+    
+        $eventsManager->attach("dispatch:beforeException", function($event, $dispatcher, $exception) {
+    
+            //Handle 404 exceptions
+            if ($exception instanceof \Phalcon\Mvc\Dispatcher\Exception) {
+                $dispatcher->forward(array(
+                    'controller' => 'index',
+                    'action' => 'show404'
+                ));
+                return false;
+            }
+    
+            //Handle other exceptions
+            $dispatcher->forward(array(
+                'controller' => 'index',
+                'action' => 'show503'
+            ));
+    
+            return false;
+        });
+    
+        $dispatcher = new \Phalcon\Mvc\Dispatcher();
+    
+        //Bind the EventsManager to the dispatcher
+        $dispatcher->setEventsManager($eventsManager);
+    
+        return $dispatcher;
+    
+    }, true);
 
     /**
      * Handle routes
