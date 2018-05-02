@@ -17,6 +17,8 @@
         <div class="form-group">
             <?php echo $form->render('submit'); ?>
         </div>
+        
+        <input type='hidden' name='<?= $this->security->getTokenKey() ?>' value='<?= $this->security->getToken() ?>'/>
     </form>
     <p>Login to your Application account below.
         <?= $this->tag->linkTo('user/register', 'Need to register?') ?>

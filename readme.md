@@ -7,6 +7,7 @@
 
 ## Git Commit's
 
+- Password Hashing and Cross-Site Request Forgery (CSRF) protection
 - Home, Login, Register Page Design
     * Create New Routes
     * Add Bootstrap 4.1
