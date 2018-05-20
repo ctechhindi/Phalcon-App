@@ -7,6 +7,7 @@
 
 ## Git Commit's
 
+- Phalcon Logging Services Example
 - Phalcon Login, Logout, Profile with Session
     * Phalcon not found page error handler
 - Password Hashing and Cross-Site Request Forgery (CSRF) protection
