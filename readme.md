@@ -7,6 +7,7 @@
 
 ## Git Commit's
 
+- Finding Records in Database with Model
 - Create Manage Articles Page
 - Create Add Article Page with Database
 - Phalcon Logging Services Example
