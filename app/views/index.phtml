@@ -37,6 +37,19 @@
                             }
                         ?>
                     </li>
+                    <li class="nav-item active">
+                        <?php
+                            # Check User Login
+                            if ($this->session->has('IS_LOGIN'))
+                            {
+                                echo $this->tag->linkTo([
+                                    "article/manage", 
+                                    '<i class="fa fa-cogs" aria-hidden="true"></i> Manage Articles', 
+                                    "class" => "nav-link"]
+                                );
+                            }
+                        ?>
+                    </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <?php

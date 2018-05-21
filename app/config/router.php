@@ -16,5 +16,6 @@ $router->add('/user/logout', ['controller' => 'user', 'action' => 'logout']);
 // Article Routes
 $router->add('/article/create', ['controller' => 'article', 'action' => 'create']);
 $router->add('/article/create/submit', ['controller' => 'article', 'action' => 'createSubmit']);
+$router->add('/article/manage', ['controller' => 'article', 'action' => 'manage']);
 
 $router->handle();

@@ -99,4 +99,14 @@ class ArticleController extends ControllerBase
 
         $this->view->disable();
     }
+
+    /**
+     * Manage Articles
+     */
+    public function manageAction()
+    {
+        $this->tag->setTitle('Phalcon :: Manage Articles');
+
+        // Fetch All User Articles
+    }
 }

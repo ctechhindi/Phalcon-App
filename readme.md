@@ -7,6 +7,7 @@
 
 ## Git Commit's
 
+- Create Manage Articles Page
 - Create Add Article Page with Database
 - Phalcon Logging Services Example
 - Phalcon Login, Logout, Profile with Session
