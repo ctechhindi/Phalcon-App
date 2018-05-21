@@ -1,0 +1,25 @@
+<div class="container">
+    <h3><i class="fa fa-plus"></i> Add Article</h3>
+    <!-- Show Flash Session Data -->
+    <p><?= $this->flashSession->output() ?></p>
+
+    <?= $this->tag->form("article/create/submit"); ?>
+
+        <div class="form-group">
+            <label for="title">Article Title</label>
+            <?= $form->render('title'); ?>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Article Description</label>
+            <?= $form->render('description'); ?>
+        </div>
+
+        <div class="form-group">
+            <?= $form->render('save'); ?>
+            <?= $form->render('publish'); ?>
+        </div>
+
+        <input type='hidden' name='<?= $this->security->getTokenKey() ?>' value='<?= $this->security->getToken() ?>'/>
+    <?= $this->tag->endForm() ?>
+</div>

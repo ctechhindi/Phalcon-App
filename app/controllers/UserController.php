@@ -5,10 +5,6 @@ use Phalcon\Http\Request;
 use App\Forms\RegisterForm;
 use App\Forms\LoginForm;
 
-use Phalcon\Logger;
-use Phalcon\Logger\Adapter\File as FileAdapter;
-use Phalcon\Logger\Formatter\Line as LineFormatter;
-
 class UserController extends ControllerBase
 {
     public $loginForm;
@@ -16,72 +12,6 @@ class UserController extends ControllerBase
 
     public function onConstruct()
     {
-        # https://docs.phalconphp.com/en/3.3/logging#usage-file
-        
-        # Create Logger File in Public Folder
-        // $logger = new FileAdapter('test.log');
-
-        # Create Logger File in app/logs/ Folder
-        $logger = new FileAdapter(APP_PATH. '/logs/test.log');
-
-        # Create Logger File in app/logs/ Folder with Force
-        // $logger = new FileAdapter(APP_PATH. '/logs/test.log', ['mode' => 'w']);
-
-        # Changing the logger format
-        $formatter = new LineFormatter('%date% - %message%');
-        $logger->setFormatter($formatter);
-
-        # Create Logger
-        $logger->critical(
-            'This is a critical message'
-        );
-        
-        $logger->emergency(
-            'This is an emergency message'
-        );
-        
-        $logger->debug(
-            'This is a debug message'
-        );
-        
-        $logger->error(
-            'This is an error message'
-        );
-        
-        $logger->info(
-            'This is an info message'
-        );
-        
-        $logger->notice(
-            'This is a notice message'
-        );
-        
-        $logger->warning(
-            'This is a warning message'
-        );
-        
-        $logger->alert(
-            'This is an alert message'
-        );
-        
-        // You can also use the log() method with a Logger constant:
-        $logger->log(
-            'This is another error message',
-            Logger::ERROR
-        );
-        
-        // If no constant is given, DEBUG is assumed.
-        $logger->log(
-            'This is a message'
-        );
-        
-        // You can also pass context parameters like this
-        $logger->log(
-            'This is a {message}', 
-            [ 
-                'message' => 'parameter' 
-            ]
-        );
     }
 
     public function initialize()
@@ -168,6 +98,7 @@ class UserController extends ControllerBase
                 # https://docs.phalconphp.com/en/3.3/session#start
 
                 // Set a session
+                $this->session->set('AUTH_ID', $user->id);
                 $this->session->set('AUTH_NAME', $user->name);
                 $this->session->set('AUTH_EMAIL', $user->email);
                 $this->session->set('AUTH_CREATED', $user->created);

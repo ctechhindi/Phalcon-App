@@ -13,4 +13,8 @@ $router->add('/user/register/submit', ['controller' => 'user', 'action' => 'regi
 $router->add('/user/profile', ['controller' => 'user', 'action' => 'profile']);
 $router->add('/user/logout', ['controller' => 'user', 'action' => 'logout']);
 
+// Article Routes
+$router->add('/article/create', ['controller' => 'article', 'action' => 'create']);
+$router->add('/article/create/submit', ['controller' => 'article', 'action' => 'createSubmit']);
+
 $router->handle();
