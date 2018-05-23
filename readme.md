@@ -7,6 +7,7 @@
 
 ## Git Commit's
 
+- Finding and Manage User Articles
 - Finding Records in Database with Model
 - Create Manage Articles Page
 - Create Add Article Page with Database

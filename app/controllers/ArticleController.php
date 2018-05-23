@@ -109,81 +109,23 @@ class ArticleController extends ControllerBase
         $this->tag->setTitle('Phalcon :: Manage Articles');
 
         // Fetch All User Articles
-        # ---------------------------------------------------------------------------------------------------
-        // $articles = Articles::find("is_public = '1'");
-        $articles = Articles::find(
-            [
-                'conditions' => 'title = ?1',
-                'bind'       => [
-                    1 => 'Article Title Second',
-                ],
-                'columns' => 'id, title',
-            ]
-        );
+        $articles = Articles::find([
+            'conditions' => 'user_id = ?1',
+            'bind'       => [
+                1 => $this->session->get('AUTH_ID'),
+            ],
+            // 'columns' => 'id, title',
+        ]);
 
-        foreach ($articles as $article) {
-            echo "<br>";
-            echo $article->id .', Title :'.$article->title, "\n";
-        }
-        # ---------------------------------------------------------------------------------------------------
-        
+        /**
+         * Send Data in View Template
+         * --------------------------------------------------------
+         * $this->view->articlesdata = "Auth ID";
+         * $this->view->setVars(['articlesdata' => "Auth ID"]);
+         */
+        $this->view->articlesData = $articles;
 
-        # ---------------------------------------------------------------------------------------------------
-        $articles = Articles::query()
-            ->where('title = :title:')
-            ->andWhere('year < 2000')
-            ->bind(['title' => 'Article Title'])
-            ->order('name')
-            ->execute();
-
-        foreach ($articles as $article) {
-            echo "<br>";
-            echo $article->id .', Title :'.$article->title, "\n";
-        }
-        # ---------------------------------------------------------------------------------------------------
-        
-        
-        # ---------------------------------------------------------------------------------------------------
-        $title = 'Article Title Second';
-
-        $article = Articles::findFirstByTitle($title);
-        // $article->count();
-        if ($article) {
-            echo 'The first article with the name ' . $title . ' cost ' . $article->title . '. ID '. $article->id;
-        } else {
-            echo 'There were no articles found in our table with the name ' . $title . '.';
-        }
-        # ---------------------------------------------------------------------------------------------------
-        
-
-        # ---------------------------------------------------------------------------------------------------
-        // Bind parameters
-        $parameters = [
-            'title' => 'Article Title',
-            'is_public' => 'Article Title',
-        ];
-
-        // Casting Types
-        $types = [
-            'title' => Column::BIND_PARAM_STR,
-            'is_public' => Column::BIND_PARAM_INT,
-        ];
-
-        // Query robots binding parameters with string placeholders
-        $articles = Articles::find(
-            [
-                'title = :title: AND is_public = :is_public:',
-                'bind'      => $parameters,
-                'bindTypes' => $types,
-            ]
-        );
-
-        foreach ($articles as $article) {
-            echo "<br>";
-            echo $article->id .', Title :'.$article->title, "\n";
-        }
-        # ---------------------------------------------------------------------------------------------------
-
-        exit;
+        # View Page Disable
+        // $this->view->disable();
     }
 }

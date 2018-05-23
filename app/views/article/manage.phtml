@@ -1,1 +1,68 @@
-<h1>View/Manage Articles</h1>
+<div class="container">
+    <h3><i class="fa fa-cogs"></i> Manage Article</h3>
+    <!-- Show Flash Session Data -->
+    <p><?= $this->flashSession->output() ?></p>
+
+    <!-- Check User Articles Found/NotEmpty -->
+    <?php if (!empty($articlesData->count())) { ?>
+        <table class="table table-hover table-sm table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Last Update</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <?php foreach ($articlesData as $key => $article) { ?>
+                        <tr>
+                            <th scope="row"><?= ++$key ?></th>
+                            <td><?= $article->title ?></td>
+                            <!-- <td><?= substr($article->description, 0, 80) ?></td> -->
+                            <td class="text-truncate" style="max-width: 350px;"><?= $article->description ?></td>
+                            <td title="<?= date("Y-m-d h:i:sa", $article->updated) ?>"><?= date("d/m/Y", $article->updated) ?></td>
+                            <td>
+                                <?php if ($article->is_public == 1) { ?>
+                                    <button class="btn btn-light" title="Public"><i class="fa fa-globe"></i></button>
+                                <?php } else { ?>
+                                    <button class="btn btn-success" title="Private"><i class="fa fa-lock"></i></button>
+                                <?php } ?>
+                            </td>
+                            <td>
+                                <?php
+                                    echo $this->tag->linkTo([
+                                        "article/edit/".$article->id,
+                                        '<i class="fa fa-pencil"></i>',
+                                        "class" => "btn btn-primary",
+                                        "title" => "Edit Article"
+                                    ]);
+                                    echo "&nbsp";
+                                    echo $this->tag->linkTo([
+                                        "article/delete/".$article->id,
+                                        '<i class="fa fa-trash"></i>',
+                                        "class" => "btn btn-danger",
+                                        "title" => "Delete Article"
+                                    ]);
+                                ?>
+                            </td>
+                        <tr>
+                    <?php } ?>
+            </tbody>
+        </table>
+    <?php } else { ?>
+        <hr>
+        <div class="text-center">
+            <i class="fa fa-database fa-5x text-danger" aria-hidden="true"></i>
+            <h2 class="text-danger"><b>Sorry,</b> No Data Found!</h2>
+            <?php
+                echo $this->tag->linkTo([
+                    "article/create",
+                    'create new article',
+                ]);
+            ?>
+        </div>
+    <?php } ?>
+</div>
