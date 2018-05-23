@@ -128,4 +128,136 @@ class ArticleController extends ControllerBase
         # View Page Disable
         // $this->view->disable();
     }
+
+    /**
+     * Edit Article
+     */
+    public function editAction($articleId = null) {
+        
+        // Set Page Title
+        $this->tag->setTitle('Phalcon :: Edit Article');
+
+        // Check article id not empty
+        if (!empty($articleId) AND $articleId != null)
+        {
+            // Check Post Request
+            if($this->request->isPost())
+            {
+                # bind user type data
+                $this->createArticleForm->bind($this->request->getPost(), $this->articleModel);
+                $this->view->form = new CreateArticleForm($this->articleModel, [
+                    "edit" => true
+                ]);
+                
+            } else
+            {
+                // Fetch User Article
+                $article = Articles::findFirst([
+                    'conditions' => 'id = :1: AND user_id = :2:',
+                    'bind' => [
+                        '1' => $articleId,
+                        '2' => $this->session->get('AUTH_ID')
+                    ]
+                ]);
+                
+                if (!$article) {
+                    $this->flashSession->error('Article was not found');
+                    return $this->response->redirect('article/create');
+                }
+
+                // Send Article Data in Article Form
+                $this->view->form = new CreateArticleForm($article, [
+                    "edit" => true
+                ]);
+            }
+        } else {
+            return $this->response->redirect('article/manage');
+        }
+    }
+
+    /**
+     * Edit Article Action Submit
+     * @method: POST
+     * @param: title
+     * @param: description
+     */
+    public function editSubmitAction()
+    {
+        // check post request
+        if (!$this->request->isPost()) {
+            return $this->response->redirect('article/manage');
+        }
+
+        // Validate CSRT Token
+        // if (!$this->security->checkToken()) {
+        //     $this->flashSession->error("Invalid Token");
+        //     return $this->response->redirect('article/manage');
+        // }
+
+        $articleID = $this->request->getPost("id", "int");
+
+        // Check Agin User Article is Valid
+        $article = Articles::findFirst([
+            'conditions' => 'id = :1: AND user_id = :2:',
+            'bind' => [
+                '1' => $articleID,
+                '2' => $this->session->get('AUTH_ID')
+            ]
+        ]);
+
+        if (!$article) {
+            $this->flashSession->error('Article was not found');
+            return $this->response->redirect('article/create');
+        }
+
+        # Check Form Validation
+        if (!$this->createArticleForm->isValid($this->request->getPost(), $article)) {
+            foreach ($this->createArticleForm->getMessages() as $message) {
+                $this->flashSession->error($message);
+                return $this->dispatcher->forward([
+                    'controller' => $this->router->getControllerName(),
+                    'action'     => 'edit',
+                    'params' => [$articleID]
+                ]);
+            }
+        }
+
+        // Set Article New Data
+
+        # Article Set Save/Publish Value
+        if ($this->request->getPost('publish') != NULL) {
+            // Article Publish
+            $this->articleModel->setIsPublic(1);
+
+        } else {
+            // Article Save Draft
+            $this->articleModel->setIsPublic(0);
+        }
+
+        // article id set
+        $this->articleModel->setId($articleID);
+        $this->articleModel->setUserId($this->session->get('AUTH_ID'));
+        // $this->articleModel->setCreated(time());
+        $this->articleModel->setUpdated(time());
+
+        # Doc :: https://docs.phalconphp.com/en/3.3/db-models#create-update-records
+        if ($this->articleModel->save($_POST) === false) {
+            foreach ($this->articleModel->getMessages() as $m) {
+                $this->flashSession->error($m);
+            }
+
+            return $this->dispatcher->forward([
+                'controller' => $this->router->getControllerName(),
+                'action'     => 'edit',
+            ]);
+        }
+
+        // Clear Article Form
+        $this->createArticleForm->clear();
+
+        $this->flashSession->success('Article was updated successfully.');
+        return $this->response->redirect('article/manage');
+
+        $this->view->disable();
+    }
 }

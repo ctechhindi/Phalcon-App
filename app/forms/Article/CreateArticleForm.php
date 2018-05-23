@@ -3,6 +3,7 @@ namespace App\Forms\Article;
 
 use Phalcon\Forms\Form;
 use Phalcon\Forms\Element\Text;
+use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Element\Submit;
 // Validation
@@ -12,8 +13,16 @@ use Phalcon\Validation\Validator\Email;
 
 class CreateArticleForm extends Form
 {
-    public function initialize()
+    public function initialize($entity = null, $options = [])
     {
+        if (isset($options["edit"])) {
+            $id = new Hidden('id', [
+                "required" => true,
+            ]);
+
+            $this->add($id);
+        }
+
         /**
          * Atricle Title
          */

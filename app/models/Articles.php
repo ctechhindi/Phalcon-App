@@ -221,6 +221,14 @@ class Articles extends \Phalcon\Mvc\Model
     {
         $this->setSchema("phalcon_demo-app");
         $this->setSource("articles");
+
+        /**
+         * Skipping Columns
+         * -----------------------------------
+         */
+        $this->skipAttributesOnUpdate([
+            'created'
+        ]);
     }
 
     /**

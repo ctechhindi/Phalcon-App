@@ -7,6 +7,7 @@
 
 ## Git Commit's
 
+- Edit User Articles \ Phalcon Update Data
 - Finding and Manage User Articles
 - Finding Records in Database with Model
 - Create Manage Articles Page
