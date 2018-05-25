@@ -44,6 +44,7 @@
                                         "article/delete/".$article->id,
                                         '<i class="fa fa-trash"></i>',
                                         "class" => "btn btn-danger",
+                                        "onclick" => "return confirm('Are you sure?')",
                                         "title" => "Delete Article"
                                     ]);
                                 ?>

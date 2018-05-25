@@ -189,10 +189,10 @@ class ArticleController extends ControllerBase
         }
 
         // Validate CSRT Token
-        // if (!$this->security->checkToken()) {
-        //     $this->flashSession->error("Invalid Token");
-        //     return $this->response->redirect('article/manage');
-        // }
+        if (!$this->security->checkToken()) {
+            $this->flashSession->error("Invalid Token");
+            return $this->response->redirect('article/manage');
+        }
 
         $articleID = $this->request->getPost("id", "int");
 
@@ -258,6 +258,47 @@ class ArticleController extends ControllerBase
         $this->flashSession->success('Article was updated successfully.');
         return $this->response->redirect('article/manage');
 
+        $this->view->disable();
+    }
+
+    /**
+     * Delete Article
+     */
+    public function deleteAction($articleId)
+    {
+        $id = (int) $articleId;
+        if ($id > 0 AND !empty($id))
+        {
+            // Check Agin User Article is Valid
+            $article = Articles::findFirst([
+                'conditions' => 'id = :1: AND user_id = :2:',
+                'bind' => [
+                    '1' => $id,
+                    '2' => $this->session->get('AUTH_ID')
+                ]
+            ]);
+
+            if (!$article) {
+                $this->flashSession->error('Article was not found');
+                return $this->response->redirect('article/manage');
+            }    
+
+            if (!$article->delete()) {
+                foreach ($article->getMessages() as $msg) {
+                    $this->flashSession->error((string) $msg);
+                }
+                return $this->response->redirect("article/manage");
+            } else {
+                $this->flashSession->success("Article was deleted");
+                return $this->response->redirect("article/manage");
+            }
+
+        } else {
+            $this->flashSession->error("Article ID Invalid.");
+            return $this->response->redirect("article/manage");
+        }
+
+        # View Page Disable
         $this->view->disable();
     }
 }

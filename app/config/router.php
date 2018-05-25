@@ -19,6 +19,7 @@ $router->add('/article/create/submit', ['controller' => 'article', 'action' => '
 $router->add('/article/manage', ['controller' => 'article', 'action' => 'manage']);
 $router->add('/article/edit', ['controller' => 'article', 'action' => 'edit']);
 $router->add('/article/edit/submit', ['controller' => 'article', 'action' => 'editSubmit']);
+$router->add('/article/delete', ['controller' => 'article', 'action' => 'delete']);
 
 
 $router->handle();
