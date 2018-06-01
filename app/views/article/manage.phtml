@@ -33,15 +33,16 @@
                             </td>
                             <td>
                                 <?php
+                                    $id = str_replace(array("'",'%'),array('%27',"'"),urlencode($this->crypt->encryptBase64($article->id)));
                                     echo $this->tag->linkTo([
-                                        "article/edit/".$article->id,
+                                        "article/edit/".$id,
                                         '<i class="fa fa-pencil"></i>',
                                         "class" => "btn btn-primary",
                                         "title" => "Edit Article"
                                     ]);
                                     echo "&nbsp";
                                     echo $this->tag->linkTo([
-                                        "article/delete/".$article->id,
+                                        "article/delete/".$id,
                                         '<i class="fa fa-trash"></i>',
                                         "class" => "btn btn-danger",
                                         "onclick" => "return confirm('Are you sure?')",

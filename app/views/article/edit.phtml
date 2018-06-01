@@ -3,6 +3,10 @@
     <!-- Show Flash Session Data -->
     <p><?= $this->flashSession->output() ?></p>
 
+    <?php
+        # URL Segments
+        $uri_segments = explode("/", $this->request->getUri());
+    ?>
     <?= $this->tag->form("article/edit/submit"); ?>
 
         <div class="form-group">
@@ -19,8 +23,8 @@
             <?= $form->render('save'); ?>
             <?= $form->render('publish'); ?>
         </div>
-
-        <?= $form->render('id'); ?>
+        
+        <?= $form->render('eid', ['value' => $uri_segments[3]]); ?>
 
         <input type='hidden' name='<?= $this->security->getTokenKey() ?>' value='<?= $this->security->getToken() ?>'/>
     <?= $this->tag->endForm() ?>

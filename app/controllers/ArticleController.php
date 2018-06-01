@@ -117,6 +117,7 @@ class ArticleController extends ControllerBase
             // 'columns' => 'id, title',
         ]);
 
+
         /**
          * Send Data in View Template
          * --------------------------------------------------------
@@ -132,8 +133,11 @@ class ArticleController extends ControllerBase
     /**
      * Edit Article
      */
-    public function editAction($articleId = null) {
-        
+    public function editAction($articleId = null)
+    {
+        $url_id = urldecode(strtr($articleId,"'",'%'));
+        $articleId = $this->crypt->decryptBase64($url_id);
+
         // Set Page Title
         $this->tag->setTitle('Phalcon :: Edit Article');
 
@@ -194,7 +198,13 @@ class ArticleController extends ControllerBase
             return $this->response->redirect('article/manage');
         }
 
-        $articleID = $this->request->getPost("id", "int");
+        // get article id
+        $articleEID = $this->request->getPost("eid");
+
+        /**
+         * Decode Article Eid
+         */
+        $articleID = $this->crypt->decryptBase64(urldecode(strtr($articleEID,"'",'%')));
 
         // Check Agin User Article is Valid
         $article = Articles::findFirst([
@@ -264,9 +274,16 @@ class ArticleController extends ControllerBase
     /**
      * Delete Article
      */
-    public function deleteAction($articleId)
+    public function deleteAction($articleEID)
     {
-        $id = (int) $articleId;
+        /**
+         * Decode Article EID
+         * ----------------------------------------------------
+         * http://php.net/manual/en/function.urlencode.php
+         */
+        $articleID = $this->crypt->decryptBase64(urldecode(strtr($articleEID,"'",'%')));
+
+        $id = (int) $articleID;
         if ($id > 0 AND !empty($id))
         {
             // Check Agin User Article is Valid

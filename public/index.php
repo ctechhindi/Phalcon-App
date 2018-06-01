@@ -3,6 +3,7 @@ use Phalcon\Di\FactoryDefault;
 use Phalcon\Flash\Direct as FlashDirect;
 use Phalcon\Flash\Session as FlashSession;
 use Phalcon\Session\Adapter\Files as Session;
+use Phalcon\Crypt;
 
 error_reporting(E_ALL);
 
@@ -98,6 +99,26 @@ try {
         return $dispatcher;
     
     }, true);
+
+    /**
+     * Encryption/Decryption
+     * ----------------------
+     * https://docs.phalconphp.com/en/3.3/crypt
+     */
+    $di->set(
+        'crypt',
+        function () {
+            $crypt = new Crypt();
+    
+            // Set a global encryption key
+            $crypt->setKey(
+                "T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\x07&[\x99\x18\xa4~Lc1\xbeW\xb3"
+            );
+    
+            return $crypt;
+        },
+        true
+    );
 
     /**
      * Handle routes

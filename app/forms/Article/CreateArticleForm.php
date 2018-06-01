@@ -16,7 +16,7 @@ class CreateArticleForm extends Form
     public function initialize($entity = null, $options = [])
     {
         if (isset($options["edit"])) {
-            $id = new Hidden('id', [
+            $id = new Hidden('eid', [
                 "required" => true,
             ]);
 

@@ -7,6 +7,7 @@
 
 ## Git Commit's
 
+- Encryption and Decryption Article Id
 - Delete User Articles \ Phalcon Delete Data
 - Edit User Articles \ Phalcon Update Data
 - Finding and Manage User Articles
